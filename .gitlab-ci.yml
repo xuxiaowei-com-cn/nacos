@@ -162,6 +162,7 @@ build:
     - rm -rf $CI_PROJECT_DIR/.m2/repository/io/xuxiaowei/nacos
   artifacts:
     name: "${CI_JOB_NAME}"
+    expire_in: 1 day
     paths:
       - nacos
   cache:
