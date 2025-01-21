@@ -4,8 +4,9 @@ stages:
 
 build:
   stage: build
-  image: maven:3.6.3-jdk-8
+  image: $BASE_IMAGE
   variables:
+    BASE_IMAGE: maven:3.6.3-jdk-8
     MAVEN_OPTS: >-
       -Dhttps.protocols=TLSv1.2
       -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
@@ -35,14 +36,16 @@ build:
     - GPG_FILE=`find / -name xuxiaowei_0x30F97859_SECRET`
     - echo $GPG_FILE
     - gpg --import $GPG_FILE
-    #- SETTINGS_FILE=`find / -name settings.xml`
-    #- echo $SETTINGS_FILE
-    - SETTINGS_FILE=/usr/share/maven/conf/settings.xml
+    - SETTINGS_FILE=`find / -name settings.xml`
+    - echo $SETTINGS_FILE
+    #- SETTINGS_FILE=/usr/share/maven/conf/settings.xml
     - sed -i "s#</servers>#<server><id>ossrh</id><username>$ossrh_user</username><password>$ossrh_pass</password></server>&#" $SETTINGS_FILE
-    - VERSION=2.4.3
+    - VERSION=2.5.0
     - echo $VERSION
     - NACOS_TAG_VERSION=$(echo $VERSION | sed 's/-SNAPSHOT//')
     - echo $NACOS_TAG_VERSION
+    - git --version || yum -y install git
+    - wget --version || yum -y install wget
     - git clone --depth 1 --branch $NACOS_TAG_VERSION https://github.com/alibaba/nacos.git
     - POM_XML=$(echo -e "$POM_XML" | tr -d '\n')
     - sed -i "s#</project>#$POM_XML&#" ./nacos/auth/pom.xml
@@ -144,7 +147,7 @@ build:
     - cp Author.java  nacos/plugin-default-impl/nacos-default-plugin-all/src/main/java/io/xuxiaowei/nacos
     - cd nacos
     - >-
-      mvn clean -U install -Dmaven.test.skip=true deploy -Prelease-sign-artifacts
+      mvn -V clean -U install -Dmaven.test.skip=true deploy -Prelease-sign-artifacts
       -pl auth
       -pl cmdb
       -pl consistency
