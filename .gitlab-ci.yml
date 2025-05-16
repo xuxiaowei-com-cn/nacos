@@ -46,6 +46,8 @@ build:
     - wget --version || yum -y install wget
     - git clone --depth 1 --branch $NACOS_TAG_VERSION https://github.com/alibaba/nacos.git
     - sed -i '1111,1122d' ./nacos/pom.xml
+    - sed -i '607,615d' ./nacos/pom.xml
+    - sed -i '488,498d' ./nacos/pom.xml
     - sed -i '158,165d' ./nacos/naming/pom.xml
     - sed -i '134,141d' ./nacos/console/pom.xml
     - rm ./nacos/console/src/main/resources/static -rf
