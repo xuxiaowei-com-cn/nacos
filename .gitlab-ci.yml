@@ -184,7 +184,7 @@ build:
       -pl prometheus
       -pl sys
       -pl server
-      -s $SETTINGS_FILE
+      -s $CI_PROJECT_DIR/$SETTINGS_FILE
     - rm -rf $CI_PROJECT_DIR/.m2/repository/com/alibaba/nacos
     - rm -rf $CI_PROJECT_DIR/.m2/repository/io/xuxiaowei/nacos
   artifacts:
