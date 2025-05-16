@@ -68,6 +68,7 @@ build:
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/lock/pom.xml                                               --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/naming/pom.xml                                             --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/plugin-default-impl/nacos-default-auth-plugin/pom.xml      --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
+    - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/plugin/control/pom.xml                                           --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/plugin-default-impl/nacos-default-control-plugin/pom.xml   --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/plugin-default-impl/nacos-default-plugin-all/pom.xml       --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/persistence/pom.xml                                        --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
