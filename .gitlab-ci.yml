@@ -159,6 +159,7 @@ build:
     - cd nacos
     - >-
       mvn -V clean -U install -Dmaven.test.skip=true deploy -Prelease-sign-artifacts
+      -pl ai
       -pl auth
       -pl cmdb
       -pl consistency
