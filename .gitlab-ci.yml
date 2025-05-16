@@ -153,6 +153,7 @@ build:
     - ./maven-dependencies dependency   edit --file-path=$CI_PROJECT_DIR/nacos/server/pom.xml                                             --group-id=com.alibaba.nacos      --artifact-id=nacos-istio                       --after-group-id=io.xuxiaowei.nacos --after-version=$NACOS_TAG_VERSION
     - ./maven-dependencies dependency   edit --file-path=$CI_PROJECT_DIR/nacos/server/pom.xml                                             --group-id=com.alibaba.nacos      --artifact-id=nacos-prometheus                  --after-group-id=io.xuxiaowei.nacos --after-version=$NACOS_TAG_VERSION
     - ./maven-dependencies dependency   edit --file-path=$CI_PROJECT_DIR/nacos/server/pom.xml                                             --group-id=com.alibaba.nacos      --artifact-id=nacos-default-plugin-all          --after-group-id=io.xuxiaowei.nacos --after-version=$NACOS_TAG_VERSION
+    - ./maven-dependencies dependency   edit --file-path=$CI_PROJECT_DIR/nacos/plugin/control/pom.xml                                     --group-id=com.alibaba.nacos      --artifact-id=nacos-common                      --after-group-id=com.alibaba.nacos  --after-version=$NACOS_TAG_VERSION
     - mkdir -p        nacos/plugin-default-impl/nacos-default-plugin-all/src/main/java/io/xuxiaowei/nacos
     - cp Author.java  nacos/plugin-default-impl/nacos-default-plugin-all/src/main/java/io/xuxiaowei/nacos
     - cd nacos
