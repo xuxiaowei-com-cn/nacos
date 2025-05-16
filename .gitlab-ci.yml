@@ -1,6 +1,5 @@
 stages:
   - build
-  - sync
 
 build:
   stage: build
@@ -205,7 +204,7 @@ build:
     - changes:
         - .gitlab-ci.yml
 
-# 嵌入
-include:
-  # 同步代码
-  - /sync.yml
+## 嵌入
+#include:
+#  # 同步代码
+#  - /sync.yml
