@@ -57,6 +57,7 @@ build:
     - echo $MAVEN_DEPENDENCIES_URL
     - wget -O maven-dependencies $MAVEN_DEPENDENCIES_URL
     - chmod +x maven-dependencies
+    - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/ai/pom.xml                                                 --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/auth/pom.xml                                               --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/cmdb/pom.xml                                               --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/consistency/pom.xml                                        --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
@@ -75,6 +76,7 @@ build:
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/prometheus/pom.xml                                         --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/sys/pom.xml                                                --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
     - ./maven-dependencies current      edit --file-path=$CI_PROJECT_DIR/nacos/server/pom.xml                                             --after-group-id=io.xuxiaowei.nacos   --after-version=$VERSION
+    - ./maven-dependencies description  edit --file-path=$CI_PROJECT_DIR/nacos/ai/pom.xml                                                 --after-description=nacos-ai
     - ./maven-dependencies description  edit --file-path=$CI_PROJECT_DIR/nacos/auth/pom.xml                                               --after-description=nacos-auth
     - ./maven-dependencies description  edit --file-path=$CI_PROJECT_DIR/nacos/cmdb/pom.xml                                               --after-description=nacos-cmdb
     - ./maven-dependencies description  edit --file-path=$CI_PROJECT_DIR/nacos/consistency/pom.xml                                        --after-description=nacos-consistency
