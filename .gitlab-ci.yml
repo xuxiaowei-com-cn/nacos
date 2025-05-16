@@ -167,6 +167,7 @@ build:
       -pl k8s-sync
       -pl lock
       -pl naming
+      -pl plugin/control
       -pl plugin-default-impl/nacos-default-auth-plugin
       -pl plugin-default-impl/nacos-default-control-plugin
       -pl plugin-default-impl/nacos-default-plugin-all
