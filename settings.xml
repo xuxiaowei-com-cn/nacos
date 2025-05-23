@@ -132,7 +132,7 @@ under the License.
     -->
 
     <server>
-      <id>central</id>
+      <id>sona</id>
       <username>${central_username}</username>
       <password>${central_password}</password>
     </server>

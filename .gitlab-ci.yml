@@ -21,16 +21,6 @@ build:
       -DinstallAtEnd=true
       -DdeployAtEnd=true
     MAVEN_DEPENDENCIES_URL: https://github.com/xuxiaowei-com-cn/maven-dependencies/releases/download/v0.0.0-2024-02-29T16-20Z/maven-dependencies-linux-amd64
-    POM_XML: |
-      <plugin>
-          <groupId>org.sonatype.central</groupId>
-          <artifactId>central-publishing-maven-plugin</artifactId>
-          <version>0.7.0</version>
-          <extensions>true</extensions>
-          <configuration>
-              <publishingServerId>central</publishingServerId>
-          </configuration>
-      </plugin>
   script:
     - GPG_FILE=`find / -name xuxiaowei_0x30F97859_SECRET`
     - echo $GPG_FILE
@@ -52,8 +42,6 @@ build:
     - sed -i '134,141d' ./nacos/console/pom.xml
     - rm ./nacos/console/src/main/resources/static -rf
     - NACOS_TAG_VERSION=$VERSION
-    - POM_XML=$(echo -e "$POM_XML" | tr -d '\n')
-    - sed -i "s#</plugins>#$POM_XML&#" ./nacos/pom.xml
     - echo $MAVEN_DEPENDENCIES_URL
     - wget -O maven-dependencies $MAVEN_DEPENDENCIES_URL
     - chmod +x maven-dependencies
