@@ -37,10 +37,10 @@ build:
     - gpg --import $GPG_FILE
     - echo $SETTINGS_FILE
     - git --version || echo
-    - VERSION=3.0.0
+    - VERSION=3.0.1
     - echo $VERSION
     # 大写版本号
-    - NACOS_TAG_VERSION=3.0.0
+    - NACOS_TAG_VERSION=3.0.1
     - echo $NACOS_TAG_VERSION
     - git --version || yum -y install git
     - wget --version || yum -y install wget
