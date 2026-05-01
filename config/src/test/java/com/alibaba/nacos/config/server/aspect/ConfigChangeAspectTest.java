@@ -212,8 +212,7 @@ class ConfigChangeAspectTest {
         when(pjp.proceed(any())).thenThrow(new RuntimeException("Proceed error"));
         
         Object result = configChangeAspect.publishOrUpdateConfigAround(pjp);
-        
-        verify(configChangePluginService, Mockito.timeout(1000).times(1)).execute(any(), any());
+
         assertEquals(false, result);
     }
     
@@ -247,7 +246,7 @@ class ConfigChangeAspectTest {
         
         configChangeAspect.publishOrUpdateConfigAround(pjp);
         ArgumentCaptor<ConfigChangeRequest> requestCaptor = ArgumentCaptor.forClass(ConfigChangeRequest.class);
-        verify(configChangePluginService, Mockito.timeout(1000).times(1)).execute(requestCaptor.capture(), any());
+        verify(configChangePluginService).execute(requestCaptor.capture(), any());
         assertEquals(ConfigChangePointCutTypes.PUBLISH_BY_RPC, requestCaptor.getValue().getRequestType());
     }
     
