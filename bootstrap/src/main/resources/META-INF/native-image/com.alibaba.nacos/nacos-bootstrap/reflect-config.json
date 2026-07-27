@@ -668,12 +668,18 @@
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ "com.alibaba.nacos.config.server.service.repository.ConfigInfoPersistService", "com.alibaba.nacos.config.server.service.capacity.CapacityService" ]
+  }, {
+    "name" : "aroundPublishConfig",
+    "parameterTypes" : [ "org.aspectj.lang.ProceedingJoinPoint" ]
   } ]
 }, {
   "name" : "com.alibaba.nacos.config.server.aspect.ConfigChangeAspect",
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ "com.alibaba.nacos.config.server.configuration.ConfigChangeConfigs" ]
+  }, {
+    "name" : "publishOrUpdateConfigAround",
+    "parameterTypes" : [ "org.aspectj.lang.ProceedingJoinPoint" ]
   } ]
 }, {
   "name" : "com.alibaba.nacos.config.server.aspect.ConfigOpFailureAspect",
@@ -686,6 +692,9 @@
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ ]
+  }, {
+    "name" : "interfacePublishConfig",
+    "parameterTypes" : [ "org.aspectj.lang.ProceedingJoinPoint" ]
   } ]
 }, {
   "name" : "com.alibaba.nacos.config.server.auth.ConfigCloneSourceReadPermissionChecker",
@@ -861,6 +870,9 @@
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ "com.alibaba.nacos.config.server.service.repository.ConfigInfoPersistService", "com.alibaba.nacos.config.server.service.repository.ConfigInfoGrayPersistService" ]
+  }, {
+    "name" : "publishConfig",
+    "parameterTypes" : [ "com.alibaba.nacos.config.server.model.form.ConfigForm", "com.alibaba.nacos.config.server.model.ConfigRequestInfo", "java.lang.String" ]
   } ]
 }, {
   "name" : "com.alibaba.nacos.config.server.service.ConfigReadinessCheckService",
@@ -6225,7 +6237,20 @@
 }, {
   "name" : "com.alibaba.nacos.config.server.model.ConfigHistoryInfo"
 }, {
-  "name" : "com.alibaba.nacos.config.server.model.ConfigInfo"
+  "name" : "com.alibaba.nacos.config.server.model.ConfigInfo",
+  "methods" : [ {
+    "name" : "getAppName",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getConfigTags",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getDesc",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getType",
+    "parameterTypes" : [ ]
+  } ]
 }, {
   "name" : "com.alibaba.nacos.config.server.model.ConfigInfoGrayWrapper"
 }, {
@@ -6268,6 +6293,18 @@
     "parameterTypes" : [ "java.lang.String" ]
   }, {
     "name" : "setType",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "getContent",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getDesc",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "setContent",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setDesc",
     "parameterTypes" : [ "java.lang.String" ]
   } ],
   "name" : "com.alibaba.nacos.config.server.model.form.ConfigForm"
@@ -6383,6 +6420,12 @@
   }, {
     "name" : "queryConfigInfoByNamespace",
     "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "findConfigInfo",
+    "parameterTypes" : [ "java.lang.String", "java.lang.String", "java.lang.String" ]
+  }, {
+    "name" : "insertOrUpdate",
+    "parameterTypes" : [ "java.lang.String", "java.lang.String", "com.alibaba.nacos.config.server.model.ConfigInfo", "java.util.Map" ]
   } ],
   "name" : "com.alibaba.nacos.config.server.service.repository.embedded.EmbeddedConfigInfoPersistServiceImpl"
 }, {
@@ -6396,6 +6439,9 @@
   "methods" : [ {
     "name" : "<init>",
     "parameterTypes" : [ "com.alibaba.nacos.persistence.repository.embedded.operate.DatabaseOperate" ]
+  }, {
+    "name" : "insertConfigHistoryAtomic",
+    "parameterTypes" : [ "long", "com.alibaba.nacos.config.server.model.ConfigInfo", "java.lang.String", "java.lang.String", "java.sql.Timestamp", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String" ]
   } ],
   "name" : "com.alibaba.nacos.config.server.service.repository.embedded.EmbeddedHistoryConfigInfoPersistServiceImpl"
 }, {
@@ -6583,6 +6629,9 @@
   }, {
     "name" : "next",
     "parameterTypes" : [ ]
+  }, {
+    "name" : "index",
+    "parameterTypes" : [ ]
   } ],
   "name" : "com.alibaba.nacos.console.controller.ConsoleRedirectController"
 }, {
@@ -6706,6 +6755,12 @@
   }, {
     "name" : "getConfigList",
     "parameterTypes" : [ "com.alibaba.nacos.config.server.model.form.ConfigFormV3", "com.alibaba.nacos.core.model.form.PageForm" ]
+  }, {
+    "name" : "getConfigDetail",
+    "parameterTypes" : [ "com.alibaba.nacos.config.server.model.form.ConfigFormV3" ]
+  }, {
+    "name" : "publishConfig",
+    "parameterTypes" : [ "jakarta.servlet.http.HttpServletRequest", "com.alibaba.nacos.config.server.model.form.ConfigFormV3" ]
   } ],
   "name" : "com.alibaba.nacos.console.controller.v3.config.ConsoleConfigController"
 }, {
@@ -11658,4 +11713,241 @@
   "name" : "tools.jackson.databind.json.JsonMapper$Builder"
 }, {
   "name" : "tools.jackson.databind.module.SimpleModule"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ "com.alibaba.nacos.ai.service.agent.AgentPersistenceService", "com.alibaba.nacos.ai.service.resource.AiResourceManager", "com.alibaba.nacos.ai.pipeline.PublishPipelineExecutor" ]
+  } ],
+  "name" : "com.alibaba.nacos.ai.service.agent.AgentOperationService"
+}, {
+  "methods" : [ {
+    "name" : "getAppName",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getConfigTags",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getCreateTime",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getDataId",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getDesc",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getGroupName",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getId",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getMd5",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getModifyTime",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getNamespaceId",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getType",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "setAppName",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setConfigTags",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setDataId",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setDesc",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setId",
+    "parameterTypes" : [ "java.lang.Long" ]
+  }, {
+    "name" : "setMd5",
+    "parameterTypes" : [ "java.lang.String" ]
+  }, {
+    "name" : "setType",
+    "parameterTypes" : [ "java.lang.String" ]
+  } ],
+  "name" : "com.alibaba.nacos.api.config.model.ConfigBasicInfo"
+}, {
+  "name" : "com.alibaba.nacos.common.pathencoder.impl.WindowsEncoder"
+}, {
+  "methods" : [ {
+    "name" : "getDataId",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getId",
+    "parameterTypes" : [ ]
+  }, {
+    "name" : "getMd5",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "com.alibaba.nacos.config.server.model.ConfigInfoBase"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd900"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd901"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9010"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9011"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9012"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9013"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9014"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9015"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd9016"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd902"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd903"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd904"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd905"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd906"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd907"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd908"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd909"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90a"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90b"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90c"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90d"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90e"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.exe.ac40f70088x019fxa231xcf63x00001271bd90f"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.impl.sql.compile.CLOBTypeCompiler"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "org.apache.derby.impl.sql.compile.RefTypeCompiler"
+}, {
+  "name" : "org.springframework.web.servlet.SmartView"
+}, {
+  "name" : "org.springframework.web.servlet.view.RedirectView"
+}, {
+  "methods" : [ {
+    "name" : "<init>",
+    "parameterTypes" : [ ]
+  } ],
+  "name" : "sun.security.provider.MD5"
 } ]

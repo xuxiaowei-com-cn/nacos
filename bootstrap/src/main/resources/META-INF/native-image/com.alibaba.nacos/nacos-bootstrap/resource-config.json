@@ -3148,6 +3148,74 @@
       "pattern" : "static/next/js/vendor-ui.js"
     }, {
       "pattern" : "jdk/jfr/internal/query/view.ini"
+    }, {
+      "pattern" : "META-INF/resources/console-ui/public/js/vs/base/worker/workerMain.js"
+    }, {
+      "pattern" : "META-INF/services/com.alibaba.nacos.common.pathencoder.PathEncoder"
+    }, {
+      "pattern" : "META-INF/services/com.alibaba.nacos.config.server.model.ConfigCacheFactory"
+    }, {
+      "pattern" : "META-INF/services/com.alibaba.nacos.config.server.model.ConfigCachePostProcessor"
+    }, {
+      "pattern" : "com/alibaba/nacos/ai/service/agent/AgentOperationService.class"
+    }, {
+      "pattern" : "org/apache/derby/loc/m16_zh_CN_#Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m16_zh_Hans_CN_#Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_en.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_en_US.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh_CN_#Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh_Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh_Hans_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m25_zh_Hans_CN_#Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_en.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_en_US.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_zh.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_zh_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_zh_Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m29_zh_Hans_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_en.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_en_US.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh_CN_#Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh_Hans.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh_Hans_CN.properties"
+    }, {
+      "pattern" : "org/apache/derby/loc/m34_zh_Hans_CN_#Hans.properties"
+    }, {
+      "pattern" : "resources/console-ui/public/js/vs/base/worker/workerMain.js"
+    }, {
+      "pattern" : "static/console-ui/public/js/vs/base/worker/workerMain.js"
     } ]
   }
 }
