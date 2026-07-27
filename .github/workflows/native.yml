@@ -39,7 +39,7 @@ jobs:
       - name: "Print Maven version"
         run: ./mvnw -version
       - name: "Install dependencies"
-        run: ./mvnw -T 4C clean -B -pl bootstrap install -DskipTests -am
+        run: ./mvnw -T 4C clean -B -pl bootstrap install -Prelease-nacos -DskipTests -am
       - name: "Compile native image"
         run: ./mvnw -T 2C -B -pl bootstrap package -DskipTests -Pnative spring-boot:process-aot native:compile
       - name: "Upload binaries for ${{ matrix.module }} in ${{ matrix.os }}"
