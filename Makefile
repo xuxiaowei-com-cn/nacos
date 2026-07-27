@@ -146,8 +146,7 @@ run-maintainer-sdk-it-tests: ## Run Maintainer SDK IT Tests
 	$(MVN) $(MAVEN_ARGS) -pl test/maintainer-sdk-test clean verify -Pmaintainer-sdk-integration-test -DskipTests=false
 
 package-bootstrap-native-metadata: ## Build bootstrap JAR for GraalVM native-image metadata collection
-	$(MVN) $(MAVEN_ARGS) clean -e install -DskipTests -pl bootstrap -Prelease-nacos -am -Dmaven-compiler-plugin.version=3.15.0
-	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap -Prelease-nacos-jar -Dmaven-compiler-plugin.version=3.15.0
+	$(MVN) $(MAVEN_ARGS) clean -e install -DskipTests -pl bootstrap -Prelease-nacos -am
 
 run-bootstrap-native-metadata: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
 	${GRAALVM_HOME}/bin/java $(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true \
