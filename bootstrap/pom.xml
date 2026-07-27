@@ -97,6 +97,7 @@
                         <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter</arg>
                         <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter$CacheTuple</arg>
                         <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProvider</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProvider$JcaCryptoService</arg>
                     </buildArgs>
                 </configuration>
             </plugin>

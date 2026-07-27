@@ -39,7 +39,12 @@ MVN ?= $(shell command -v mvn >/dev/null 2>&1 && echo "mvn" || echo "./mvnw")
 #                  -V (show version information)
 MAVEN_ARGS ?= -T 4C -e -B -V
 
-JVM_BASE_ARGS := --add-opens java.base/java.util=ALL-UNNAMED
+JVM_BASE_ARGS := --add-opens java.base/java.util=ALL-UNNAMED \
+				 --add-opens java.base/java.lang=ALL-UNNAMED \
+				 --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
+				 --add-opens java.base/java.util=ALL-UNNAMED \
+				 --add-opens java.base/java.nio=ALL-UNNAMED \
+				 --add-opens java.base/sun.nio.ch=ALL-UNNAMED
 AUTH_DISABLED_ARGS := -Dnacos.core.auth.enabled=false \
                       -Dnacos.core.auth.admin.enabled=false \
                       -Dnacos.core.auth.console.enabled=false
@@ -157,4 +162,4 @@ run-merge-native-bootstrap: ## Merge collected native-image metadata into the bo
 	python3 script/native/merge_native_image_config.py --target-dir bootstrap/src/main/resources/META-INF/native-image/com.alibaba.nacos/nacos-bootstrap
 
 package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
-	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
+	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
