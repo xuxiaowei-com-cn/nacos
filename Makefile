@@ -22,8 +22,6 @@
 # Set shell to bash for better compatibility
 SHELL := /usr/bin/env bash
 
-# Mark targets as phony (not actual files)
-.PHONY: help
 # Set default target when running 'make' without arguments
 .DEFAULT_GOAL := help
 
@@ -50,8 +48,9 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
              -Dnacos.plugin.auth.nacos.token.secret.key=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg= \
              $(AUTH_DISABLED_ARGS)
 
-# Mark additional targets as phony
-.PHONY: clean test check-maven build-maven-test build-frontend build-maven build \
+# Mark all targets as phony (not actual files)
+.PHONY: help clean spotless-check spotless-apply test check-maven build-maven-test \
+	build-frontend build-maven build \
 	install-and-run-bootstrap \
 	install-and-run-bootstrap-config \
 	install-and-run-bootstrap-naming \
@@ -59,9 +58,14 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 	install-and-run-bootstrap-ai \
 	install-and-run-bootstrap-extension-ai-enabled \
 	install-and-run-bootstrap-extension-ai-disabled \
+	run-bootstrap \
 	run-it-tests \
 	run-java-sdk-it-tests \
-	run-maintainer-sdk-it-tests
+	run-maintainer-sdk-it-tests \
+	package-bootstrap-native-metadata \
+	run-bootstrap-native-metadata \
+	run-merge-native-bootstrap \
+	package-bootstrap-native
 
 # Clean all build artifacts and generated files
 clean: ## Clean the project
@@ -128,6 +132,10 @@ install-and-run-bootstrap-extension-ai-disabled: build ## Build and run Nacos wi
 	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
   -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.extension.ai.enabled=false"
 
+run-bootstrap: ## run Nacos bootstrap module
+	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
+  -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true"
+
 run-it-tests: ## Run IT Tests
 	cd test && $(MVN) $(MAVEN_ARGS) clean verify -Pintegration-test
 
@@ -142,9 +150,9 @@ package-bootstrap-native-metadata: ## Build bootstrap JAR for GraalVM native-ima
 	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap -Prelease-nacos-jar -Dmaven-compiler-plugin.version=3.15.0
 
 run-bootstrap-native-metadata: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
-	${GRAALVM_HOME}/bin/java $(JVM_BASE_ARGS) -agentlib:native-image-agent=config-output-dir=./target/native-image-config \
-		-jar ./bootstrap/target/nacos-bootstrap.jar \
-		-Dnacos.standalone=true
+	${GRAALVM_HOME}/bin/java $(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true \
+		-agentlib:native-image-agent=config-output-dir=./target/native-image-config \
+		-jar ./bootstrap/target/nacos-server.jar
 
 run-merge-native-bootstrap: ## Merge collected native-image metadata into the bootstrap resource directory
 	python3 script/native/merge_native_image_config.py --target-dir bootstrap/src/main/resources/META-INF/native-image/com.alibaba.nacos/nacos-bootstrap
