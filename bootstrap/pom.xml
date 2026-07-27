@@ -25,10 +25,10 @@
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <artifactId>nacos-bootstrap</artifactId>
     <name>nacos-bootstrap ${project.version}</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
@@ -102,6 +102,39 @@
                         <configuration>
                             <mainClass>com.alibaba.nacos.bootstrap.NacosBootstrap</mainClass>
                             <layout>ZIP</layout>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release-nacos-jar</id>
+            <build>
+                <finalName>nacos-bootstrap</finalName>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>com.alibaba.nacos.bootstrap.NacosBootstrap</mainClass>
                         </configuration>
                         <executions>
                             <execution>
