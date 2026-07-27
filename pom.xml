@@ -167,7 +167,7 @@
         <micrometer.version>1.15.11</micrometer.version>
         
         <!-- native -->
-        <native-maven-plugin.version>0.10.2</native-maven-plugin.version>
+        <native-maven-plugin.version>1.1.6</native-maven-plugin.version>
     </properties>
     <!-- == -->
     <!-- =========================================================Build plugins================================================ -->
@@ -191,6 +191,11 @@
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
                     <version>${central.publishing.maven.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <version>${native-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -326,6 +331,12 @@
                         </eclipse>
                         <removeUnusedImports/>
                     </java>
+                    <json>
+                        <includes>
+                            <include>src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/*.json</include>
+                        </includes>
+                        <jackson/>
+                    </json>
                 </configuration>
             </plugin>
             <plugin>

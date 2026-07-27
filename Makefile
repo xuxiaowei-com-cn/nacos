@@ -67,6 +67,12 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 clean: ## Clean the project
 	$(MVN) $(MAVEN_ARGS) clean
 
+spotless-check: ## Run Spotless code format check
+	$(MVN) $(MAVEN_ARGS) spotless:check
+
+spotless-apply: ## Apply Spotless code formatting
+	$(MVN) $(MAVEN_ARGS) spotless:apply
+
 test: ## Run unit tests
 	$(MVN) $(MAVEN_ARGS) test
 
@@ -130,3 +136,6 @@ run-java-sdk-it-tests: ## Run Java SDK IT Tests
 
 run-maintainer-sdk-it-tests: ## Run Maintainer SDK IT Tests
 	$(MVN) $(MAVEN_ARGS) -pl test/maintainer-sdk-test clean verify -Pmaintainer-sdk-integration-test -DskipTests=false
+
+package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
+	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
