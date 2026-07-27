@@ -59,6 +59,46 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <buildArgs>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.CertificateVerifier</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.CertificateCompressionAlgo</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.SSLPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.AsyncSSLPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.SSL</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.ReferenceCountedOpenSslEngine</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.Logger</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.LoggerContext</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.BasicStatusManager</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.spi.LoggerContextVO</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.spi.TurboFilterList</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.LogbackMDCAdapter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.Level</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.LogbackLock</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.helpers.CyclicBuffer</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.COWArrayList</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.ConsoleAppender</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.ReentryGuard</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.ReentryGuard$ReentryGuardImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.FilterAttachableImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.ContextInitializer</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.ContextInitializer$1</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.SimpleTimeBasedGuard</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.encoder.LayoutWrappingEncoder</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.ContextAwareImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.layout.TTLLLayout</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget$1</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget$2</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.BasicConfigurator</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.pattern.ThrowableProxyConverter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter$CacheTuple</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProvider</arg>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
