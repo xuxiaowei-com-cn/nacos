@@ -67,11 +67,10 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 	run-it-tests \
 	run-java-sdk-it-tests \
 	run-maintainer-sdk-it-tests \
-	install-bootstrap-jar \
-	package-bootstrap-jar \
+	install-bootstrap-jar package-bootstrap-jar \
 	run-bootstrap-jar-native \
 	run-merge-native-bootstrap \
-	package-bootstrap-native
+	install-bootstrap-native package-bootstrap-native
 
 # Clean all build artifacts and generated files
 clean: ## Clean the project
@@ -138,7 +137,7 @@ install-and-run-bootstrap-extension-ai-disabled: build ## Build and run Nacos wi
 	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
   -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.extension.ai.enabled=false"
 
-run-bootstrap: ## run Nacos bootstrap module
+run-bootstrap: ## Run Nacos bootstrap module
 	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
   -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true"
 
@@ -151,10 +150,10 @@ run-java-sdk-it-tests: ## Run Java SDK IT Tests
 run-maintainer-sdk-it-tests: ## Run Maintainer SDK IT Tests
 	$(MVN) $(MAVEN_ARGS) -pl test/maintainer-sdk-test clean verify -Pmaintainer-sdk-integration-test -DskipTests=false
 
-install-bootstrap-jar: ## Build bootstrap JAR for GraalVM native-image metadata collection
+install-bootstrap-jar: ## Build and install bootstrap JAR with dependencies to local Maven repository
 	$(MVN) $(MAVEN_ARGS) clean -e install -DskipTests -pl bootstrap -Prelease-nacos -am
 
-package-bootstrap-jar: ## Build bootstrap JAR for GraalVM native-image metadata collection
+package-bootstrap-jar: ## Package only bootstrap JAR (no install to local Maven repository, no dependencies)
 	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap -Prelease-nacos
 
 run-bootstrap-jar-native: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
@@ -165,8 +164,8 @@ run-bootstrap-jar-native: ## Run bootstrap with GraalVM native-image agent to co
 run-merge-native-bootstrap: ## Merge collected native-image metadata into the bootstrap resource directory
 	python3 script/native/merge_native_image_config.py --target-dir bootstrap/src/main/resources/META-INF/native-image/com.alibaba.nacos/nacos-bootstrap
 
-install-bootstrap-native: install-bootstrap-jar ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
+install-bootstrap-native: install-bootstrap-jar ## Build bootstrap GraalVM native image (install JAR first, then compile natively)
 	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
 
-package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
+package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (apply Spotless first, then compile natively)
 	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
