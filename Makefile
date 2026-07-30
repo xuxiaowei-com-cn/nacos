@@ -67,8 +67,9 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 	run-it-tests \
 	run-java-sdk-it-tests \
 	run-maintainer-sdk-it-tests \
-	package-bootstrap-native-metadata \
-	run-bootstrap-native-metadata \
+	install-bootstrap-jar \
+	package-bootstrap-jar \
+	run-bootstrap-jar-native \
 	run-merge-native-bootstrap \
 	package-bootstrap-native
 
@@ -150,16 +151,22 @@ run-java-sdk-it-tests: ## Run Java SDK IT Tests
 run-maintainer-sdk-it-tests: ## Run Maintainer SDK IT Tests
 	$(MVN) $(MAVEN_ARGS) -pl test/maintainer-sdk-test clean verify -Pmaintainer-sdk-integration-test -DskipTests=false
 
-package-bootstrap-native-metadata: ## Build bootstrap JAR for GraalVM native-image metadata collection
+install-bootstrap-jar: ## Build bootstrap JAR for GraalVM native-image metadata collection
 	$(MVN) $(MAVEN_ARGS) clean -e install -DskipTests -pl bootstrap -Prelease-nacos -am
 
-run-bootstrap-native-metadata: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
+package-bootstrap-jar: ## Build bootstrap JAR for GraalVM native-image metadata collection
+	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap -Prelease-nacos
+
+run-bootstrap-jar-native: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
 	${GRAALVM_HOME}/bin/java $(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true \
 		-agentlib:native-image-agent=config-output-dir=./target/native-image-config \
 		-jar ./bootstrap/target/nacos-server.jar
 
 run-merge-native-bootstrap: ## Merge collected native-image metadata into the bootstrap resource directory
 	python3 script/native/merge_native_image_config.py --target-dir bootstrap/src/main/resources/META-INF/native-image/com.alibaba.nacos/nacos-bootstrap
+
+install-bootstrap-native: install-bootstrap-jar ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
+	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
 
 package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (requires GraalVM with native-image)
 	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
