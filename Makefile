@@ -22,8 +22,6 @@
 # Set shell to bash for better compatibility
 SHELL := /usr/bin/env bash
 
-# Mark targets as phony (not actual files)
-.PHONY: help
 # Set default target when running 'make' without arguments
 .DEFAULT_GOAL := help
 
@@ -41,7 +39,12 @@ MVN ?= $(shell command -v mvn >/dev/null 2>&1 && echo "mvn" || echo "./mvnw")
 #                  -V (show version information)
 MAVEN_ARGS ?= -T 4C -e -B -V
 
-JVM_BASE_ARGS := --add-opens java.base/java.util=ALL-UNNAMED
+JVM_BASE_ARGS := --add-opens java.base/java.util=ALL-UNNAMED \
+				 --add-opens java.base/java.lang=ALL-UNNAMED \
+				 --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
+				 --add-opens java.base/java.util=ALL-UNNAMED \
+				 --add-opens java.base/java.nio=ALL-UNNAMED \
+				 --add-opens java.base/sun.nio.ch=ALL-UNNAMED
 AUTH_DISABLED_ARGS := -Dnacos.core.auth.enabled=false \
                       -Dnacos.core.auth.admin.enabled=false \
                       -Dnacos.core.auth.console.enabled=false
@@ -50,8 +53,9 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
              -Dnacos.plugin.auth.nacos.token.secret.key=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg= \
              $(AUTH_DISABLED_ARGS)
 
-# Mark additional targets as phony
-.PHONY: clean test check-maven build-maven-test build-frontend build-maven build \
+# Mark all targets as phony (not actual files)
+.PHONY: help clean spotless-check spotless-apply test check-maven build-maven-test \
+	build-frontend build-maven build \
 	install-and-run-bootstrap \
 	install-and-run-bootstrap-config \
 	install-and-run-bootstrap-naming \
@@ -59,13 +63,24 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 	install-and-run-bootstrap-ai \
 	install-and-run-bootstrap-extension-ai-enabled \
 	install-and-run-bootstrap-extension-ai-disabled \
+	run-bootstrap \
 	run-it-tests \
 	run-java-sdk-it-tests \
-	run-maintainer-sdk-it-tests
+	run-maintainer-sdk-it-tests \
+	install-bootstrap-jar package-bootstrap-jar \
+	run-bootstrap-jar-native \
+	run-merge-native-bootstrap \
+	install-bootstrap-native package-bootstrap-native
 
 # Clean all build artifacts and generated files
 clean: ## Clean the project
 	$(MVN) $(MAVEN_ARGS) clean
+
+spotless-check: ## Run Spotless code format check
+	$(MVN) $(MAVEN_ARGS) spotless:check
+
+spotless-apply: ## Apply Spotless code formatting
+	$(MVN) $(MAVEN_ARGS) spotless:apply
 
 test: ## Run unit tests
 	$(MVN) $(MAVEN_ARGS) test
@@ -122,6 +137,10 @@ install-and-run-bootstrap-extension-ai-disabled: build ## Build and run Nacos wi
 	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
   -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.extension.ai.enabled=false"
 
+run-bootstrap: ## Run Nacos bootstrap module
+	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
+  -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true"
+
 run-it-tests: ## Run IT Tests
 	cd test && $(MVN) $(MAVEN_ARGS) clean verify -Pintegration-test
 
@@ -130,3 +149,23 @@ run-java-sdk-it-tests: ## Run Java SDK IT Tests
 
 run-maintainer-sdk-it-tests: ## Run Maintainer SDK IT Tests
 	$(MVN) $(MAVEN_ARGS) -pl test/maintainer-sdk-test clean verify -Pmaintainer-sdk-integration-test -DskipTests=false
+
+install-bootstrap-jar: ## Build and install bootstrap JAR with dependencies to local Maven repository
+	$(MVN) $(MAVEN_ARGS) clean -e install -DskipTests -pl bootstrap -Prelease-nacos -am
+
+package-bootstrap-jar: ## Package only bootstrap JAR (no install to local Maven repository, no dependencies)
+	$(MVN) $(MAVEN_ARGS) clean -e package -DskipTests -pl bootstrap -Prelease-nacos
+
+run-bootstrap-jar-native: ## Run bootstrap with GraalVM native-image agent to collect reflection/config metadata
+	${GRAALVM_HOME}/bin/java $(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true \
+		-agentlib:native-image-agent=config-output-dir=./target/native-image-config \
+		-jar ./bootstrap/target/nacos-server.jar
+
+run-merge-native-bootstrap: ## Merge collected native-image metadata into the bootstrap resource directory
+	python3 script/native/merge_native_image_config.py --target-dir bootstrap/src/main/resources/META-INF/native-image/com.alibaba.nacos/nacos-bootstrap
+
+install-bootstrap-native: install-bootstrap-jar ## Build bootstrap GraalVM native image (install JAR first, then compile natively)
+	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile
+
+package-bootstrap-native: spotless-apply ## Build bootstrap GraalVM native image (apply Spotless first, then compile natively)
+	$(MVN) $(MAVEN_ARGS) clean package -DskipTests -pl bootstrap spring-boot:process-aot -Pnative native:compile

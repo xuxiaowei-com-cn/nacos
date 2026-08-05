@@ -25,10 +25,10 @@
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <artifactId>nacos-bootstrap</artifactId>
     <name>nacos-bootstrap ${project.version}</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
@@ -53,7 +53,70 @@
 
         </dependency>
     </dependencies>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <buildArgs>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.CertificateVerifier</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.CertificateCompressionAlgo</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.SSLPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.AsyncSSLPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.internal.tcnative.SSL</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.ReferenceCountedOpenSslEngine</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.BouncyCastleAlpnSslUtils</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.OpenSsl</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.ReferenceCountedOpenSslContext</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.OpenSslPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.OpenSslAsyncPrivateKeyMethod</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.JdkSslContext</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.JdkSslContext$Defaults</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.SslUtils</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.PemValue</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.PemPrivateKey</arg>
+                        <arg>--initialize-at-run-time=io.grpc.netty.shaded.io.netty.handler.ssl.PemX509Certificate</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProviderConfiguration</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jsse.provider.BouncyCastleJsseProvider</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.Logger</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.LoggerContext</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.BasicStatusManager</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.spi.LoggerContextVO</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.spi.TurboFilterList</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.LogbackMDCAdapter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.Level</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.LogbackLock</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.helpers.CyclicBuffer</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.COWArrayList</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.ConsoleAppender</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.status.InfoStatus</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.ReentryGuard</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.ReentryGuard$ReentryGuardImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.FilterAttachableImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.ContextInitializer</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.util.ContextInitializer$1</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.SimpleTimeBasedGuard</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.encoder.LayoutWrappingEncoder</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.spi.ContextAwareImpl</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.layout.TTLLLayout</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget$1</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.joran.spi.ConsoleTarget$2</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.BasicConfigurator</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.classic.pattern.ThrowableProxyConverter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter</arg>
+                        <arg>--initialize-at-build-time=ch.qos.logback.core.util.CachingDateFormatter$CacheTuple</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProvider</arg>
+                        <arg>--initialize-at-build-time=org.bouncycastle.jce.provider.BouncyCastleProvider$JcaCryptoService</arg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>dev</id>
@@ -103,6 +166,170 @@
                         </executions>
                     </plugin>
                 </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>native-linux-amd64</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>linux-amd64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-linux-aarch64</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>linux-arm64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-darwin-x86_64</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                    <arch>x86_64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>darwin-amd64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-darwin-aarch64</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>darwin-arm64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native-windows-amd64</id>
+            <activation>
+                <os>
+                    <name>windows</name>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.platform>windows-amd64</native.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>native</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jar-plugin</artifactId>
+                            <configuration>
+                                <archive>
+                                    <manifestEntries>
+                                        <Spring-Boot-Native-Processed>true</Spring-Boot-Native-Processed>
+                                    </manifestEntries>
+                                </archive>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>process-aot</id>
+                                    <goals>
+                                        <goal>process-aot</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.graalvm.buildtools</groupId>
+                            <artifactId>native-maven-plugin</artifactId>
+                            <configuration>
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <imageName>${project.artifactId}-${project.version}-${native.platform}</imageName>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-devtools</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>add-reachability-metadata</id>
+                                    <goals>
+                                        <goal>add-reachability-metadata</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>nativeTest</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>process-test-aot</id>
+                                    <goals>
+                                        <goal>process-test-aot</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.graalvm.buildtools</groupId>
+                            <artifactId>native-maven-plugin</artifactId>
+                            <configuration>
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <imageName>${project.artifactId}-${project.version}-${native.platform}</imageName>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-devtools</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>native-test</id>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
